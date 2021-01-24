@@ -30,6 +30,7 @@ class DoublyLinkedList:
         else:
             new_node.Next_Node = head
             new_node.Previous_Node = None
+            self.Head.Previous_Node = new_node
             self.Head = new_node
 
 
@@ -65,59 +66,63 @@ class DoublyLinkedList:
     def Insert_After(self, existing_val, new_val):
 
         if self.Tail.value == existing_val:
-
-            self.Insert_At_End(new_val)
+            self.InsertatEnd(new_val)
 
         else:
 
-            head = self.Head
+            pointer = self.Head
             new_node = Node(new_val)
 
-            # Transverse till head is not not None
-            while head:
+            # Transverse till pointer is not not None
+            while pointer:
 
-                # if head matches given value
-                if head.value == existing_val:
+                # if pointer node is of given
+                if pointer.value == existing_val:
 
                     # Add new_node after it
-                    new_node.Next_Node = head.Next_Node
-                    head.Next_Node = new_node
-                    new_node.Previous_Node = head.Previous_Node
-                    head.Previous_Node = new_node
-                head = head.Next_Node
+                    new_node.Next_Node = pointer.Next_Node
+                    pointer.Next_Node = new_node
+                    new_node.Previous_Node = pointer
+                    return
+                pointer = pointer.Next_Node
 
     def DeleteatFirst(self):
 
         head = self.Head
         if head is None:
-            raise "List is empty"
+            raise IndexError("List is empty.")
 
         self.Head = head.Next_Node
         self.Head.Previous_Node = None
 
     def DeleteatEnd(self):
 
-        head = self.Head
-        if head is None:
-            raise "List is empty."
+        pointer = self.Head
+        if pointer is None:
+            raise IndexError("List is empty.")
 
-        while head.Next_Node != self.Tail:
-            head = head.Next_Node
-        self.Tail = head
+        #loop till pointer's next node is not tail
+        while pointer.Next_Node != self.Tail:
+            pointer = pointer.Next_Node
+
+        self.Tail = pointer
         self.Tail.Next_Node = None
 
     def Delete_By_Value(self, value):
 
         if self.Tail.value == value:
-            self.DeleteAtEnd()
+            self.DeleteatEnd()
         elif self.Head.value == value:
             self.DeleteatFirst()
         else:
-            x = self.Head
-            while x.value != value:
-                x = x.Next_Node
-            x.value = x.Next_Node.value
-            x.Next_Node = x.Next_Node.Next_Node
+            pointer = self.Head
+
+            # Transverse until pointer node value matches given value
+            while pointer.value != value:
+                pointer = pointer.Next_Node
+
+            pointer.Next_Node.Previous_Node = pointer.Previous_Node
+            pointer.Previous_Node.Next_Node = pointer.Next_Node
 
     def Print(self):
         x = self.Head
@@ -132,11 +137,13 @@ class DoublyLinkedList:
         print(itration)
 
 
-
+'''
 a = DoublyLinkedList()
 a.InsertatFirst(232)
 a.InsertatFirst(423)
 a.InsertatFirst(213)
+a.Delete_By_Value(423)
+a.Insert_After(232, 10)
 a.InsertatFirst(88)
 a.InsertatEnd(99)
 a.DeleteatFirst()
@@ -145,21 +152,6 @@ a.Print()
 a.Print()
 print("Head = ", a.Get_Head())
 print("Tail = ", a.Get_Tail())
-
-
-'''
-Db = LinkedList()
-Db.Insert_At_First(1)
-Db.Insert_At_First(2)
-Db.Insert_At_End(3)
-Db.Insert_At_End(4)
-Db.Insert_After(2, 10)
-print(Db.Head_Tail())
-Db.Print()
-Db.Delete_At_First()
-Db.Delete_At_End()
-Db.Delete_By_Value(10)
-Db.Print()
 '''
 
 '''
