@@ -21,7 +21,7 @@ class DoublyLinkedList:
         head = self.Head
         new_node = Node(value)
 
-        #if empty Linkedlist
+        # if empty Linkedlist
         if head is None:
             self.Head = new_node
             self.Tail = new_node
@@ -32,7 +32,6 @@ class DoublyLinkedList:
             new_node.Previous_Node = None
             self.Head.Previous_Node = new_node
             self.Head = new_node
-
 
     def InsertatEnd(self, value):
         head = self.Head
@@ -78,7 +77,6 @@ class DoublyLinkedList:
 
                 # if pointer node is of given
                 if pointer.value == existing_val:
-
                     # Add new_node after it
                     new_node.Next_Node = pointer.Next_Node
                     pointer.Next_Node = new_node
@@ -101,7 +99,7 @@ class DoublyLinkedList:
         if pointer is None:
             raise IndexError("List is empty.")
 
-        #loop till pointer's next node is not tail
+        # loop till pointer's next node is not tail
         while pointer.Next_Node != self.Tail:
             pointer = pointer.Next_Node
 
@@ -132,8 +130,12 @@ class DoublyLinkedList:
         while x:
             itration += str(x.value) + " -> "
             x = x.Next_Node
-        if x == None:
-            itration += str(x)
+
+        if itration == "":
+            print("Empty Linked List")
+
+        elif x == None:
+            itration += 'null'
         print(itration)
 
 
@@ -154,56 +156,95 @@ print("Head = ", a.Get_Head())
 print("Tail = ", a.Get_Tail())
 '''
 
-'''
+
 class HashTable:
     def __init__(self, size):
         self.data = [None for i in range(size)]
         self.size = size
 
-    def Insert(self, element, index):
+    def Insert(self, element):
+        # Calculate Hash index
+        index = self.__Hash(element)
+
+        # Check Hash index
         if index < 0 or index >= self.size:
             raise IndexError("Out of Index")
 
-        if type(self.data[index]) != LinkedList:
-            print("No Linked list")
+        # If there is no linked List already at index
+        if type(self.data[index]) is not DoublyLinkedList:
+            # print("No Linked list")
             # Create a linked list at this place
-            self.data[index] = LinkedList()
-            # initialize node with value = "element"
-            tempvar = Node(element)
-            #Insert node into Linked list
-            self.data[index].InsertatFirst(tempvar)
-
-        else:
-            print("Linked List exists")
+            self.data[index] = DoublyLinkedList()
             # initialize node with value = "element"
             tempvar = Node(element)
             # Insert node into Linked list
             self.data[index].InsertatFirst(tempvar)
 
-    def ShowLinkedList(self,index):
-        return self.data[index]
+        # If there is linked list present at index
+        else:
+            # print("Linked List exists")
+            # initialize node with value = "element"
+            tempvar = Node(element)
+            # Insert node into Linked list
+            self.data[index].InsertatFirst(tempvar)
 
+    def ShowLinkedList(self, index):
 
+        linked_list = self.data[index]
+        if not linked_list:
+            linked_list = DoublyLinkedList()
 
-def Hash(something,tablesize):
-    if type(something) == int:
+        return linked_list
+
+    def __Hash(self, element):
         total = 0
-        something = str(something)
-        for calculation in something:
-            total = total+int(calculation)
+
+        # Hash Calculation if element is integer
+        if type(element) == int:
+            element = str(element)
+            for calculation in element:
+                total = total + int(calculation)
+
+
+        # Hash Calculation if element is string
+        elif type(element) == str:
+
+            for calculation in element:
+                total += ord(calculation)
+
+        else:
+            raise SystemError("Hash Function supports strings and integers only")
+
+        tablesize = self.size
         return total % tablesize
+
 
 HashTable = HashTable(10)
 
-HashTable.Insert(489898,Hash(489898,10))
+HashTable.Insert(489898)
+HashTable.Insert(8)
+HashTable.Insert(777)
+HashTable.Insert(777)
+HashTable.Insert(778)
+HashTable.Insert("Pepsi")
+HashTable.Insert("7up")
+HashTable.Insert("Sprite")
+HashTable.Insert("Marinda")
+HashTable.Insert(124)
+HashTable.Insert(14)
+HashTable.Insert(23)
+HashTable.Insert(29)
+HashTable.Insert("Coke")
+HashTable.Insert("Tea")
+HashTable.Insert("Elephant")
+HashTable.Insert("Zebra")
+HashTable.Insert("lalalala")
+HashTable.Insert(777)
 
-HashTable.Insert(8,0)
-HashTable.Insert(777,1)
+HashTable.Insert(5)
 
-HashTable.Insert(5,0)
+HashTable.ShowLinkedList(1).Print()
 
-linklist =HashTable.ShowLinkedList(0).Print()
+'''for loop in range(100):
 
-print(Hash(523,10))
-
-'''
+    HashTable.ShowLinkedList(loop).Print()'''
