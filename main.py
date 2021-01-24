@@ -1,68 +1,139 @@
-class Node:
+class Node(object):
+
     def __init__(self, value):
         self.value = value
-        self.next = None
+        self.Next_Node = None
+        self.Previous_Node = None
 
     def __str__(self):
         return str(self.value)
 
-class LinkedList:
+
+class DoublyLinkedList:
+
     def __init__(self):
-        self.head = None
-        self.tail = None
+
+        self.Head = None
+        self.Tail = None
 
     def InsertatFirst(self, value):
+
+        head = self.Head
         new_node = Node(value)
-        x = self.head
-        # to check if list is empty or not
-        if x == None:
-            self.head = new_node
-            self.tail = new_node
+
+        #if empty Linkedlist
+        if head is None:
+            self.Head = new_node
+            self.Tail = new_node
+
+        # If non-empty LinkedList
         else:
-            new_node.next = self.head
-            self.head = new_node
+            new_node.Next_Node = head
+            new_node.Previous_Node = None
+            self.Head = new_node
+
 
     def InsertatEnd(self, value):
+        head = self.Head
         new_node = Node(value)
-        if (self.head == None):
-            self.head = new_node
-            self.tail = new_node
+
+        # if empty Linkedlist
+        if head is None:
+            self.Head = new_node
+            self.Tail = new_node
+            new_node.Previous_Node = None
+
+        # if non-empty Linkedlist
         else:
-            self.tail.next = new_node
-            self.tail = new_node
+            # Transverse till head.next exists.
+            while head.Next_Node is not None:
+                head = head.Next_Node
+                # end while
+
+            new_node.Previous_Node = head
+            head.Next_Node = new_node
+            self.Tail = new_node
+
+    def Get_Head(self):
+
+        return self.Head
+
+    def Get_Tail(self):
+
+        return self.Tail
+
+    def Insert_After(self, existing_val, new_val):
+
+        if self.Tail.value == existing_val:
+
+            self.Insert_At_End(new_val)
+
+        else:
+
+            head = self.Head
+            new_node = Node(new_val)
+
+            # Transverse till head is not not None
+            while head:
+
+                # if head matches given value
+                if head.value == existing_val:
+
+                    # Add new_node after it
+                    new_node.Next_Node = head.Next_Node
+                    head.Next_Node = new_node
+                    new_node.Previous_Node = head.Previous_Node
+                    head.Previous_Node = new_node
+                head = head.Next_Node
 
     def DeleteatFirst(self):
-        if self.head == None:
-            raise SystemError("Empty linked list")
 
-        self.head = self.head.next
+        head = self.Head
+        if head is None:
+            raise "List is empty"
+
+        self.Head = head.Next_Node
+        self.Head.Previous_Node = None
 
     def DeleteatEnd(self):
-        if self.head == None:
-            raise SystemError("Empty linked list")
 
-        tempvar = self.head
-        while tempvar.next != self.tail:
-            tempvar = tempvar.next
+        head = self.Head
+        if head is None:
+            raise "List is empty."
 
-        self.tail = tempvar
-        self.tail.next = None
+        while head.Next_Node != self.Tail:
+            head = head.Next_Node
+        self.Tail = head
+        self.Tail.Next_Node = None
 
-    def Head(self):
-        return self.head.value
+    def Delete_By_Value(self, value):
 
-    def Tail(self):
-        return self.tail.value
+        if self.Tail.value == value:
+            self.DeleteAtEnd()
+        elif self.Head.value == value:
+            self.DeleteatFirst()
+        else:
+            x = self.Head
+            while x.value != value:
+                x = x.Next_Node
+            x.value = x.Next_Node.value
+            x.Next_Node = x.Next_Node.Next_Node
 
     def Print(self):
-        a = self.head
-        # traverse the linked list
-        while a:
-            print(a.value)
-            a = a.next
+        x = self.Head
 
-'''
-a = LinkedList()
+        itration = ""
+
+        while x:
+            itration += str(x.value) + " -> "
+            x = x.Next_Node
+        if x == None:
+            itration += str(x)
+        print(itration)
+
+
+
+a = DoublyLinkedList()
 a.InsertatFirst(232)
 a.InsertatFirst(423)
 a.InsertatFirst(213)
@@ -71,11 +142,27 @@ a.InsertatEnd(99)
 a.DeleteatFirst()
 a.DeleteatEnd()
 a.Print()
-print("Head = ", a.head.value)
-print("Tail = ", a.tail.value)
+a.Print()
+print("Head = ", a.Get_Head())
+print("Tail = ", a.Get_Tail())
+
+
+'''
+Db = LinkedList()
+Db.Insert_At_First(1)
+Db.Insert_At_First(2)
+Db.Insert_At_End(3)
+Db.Insert_At_End(4)
+Db.Insert_After(2, 10)
+print(Db.Head_Tail())
+Db.Print()
+Db.Delete_At_First()
+Db.Delete_At_End()
+Db.Delete_By_Value(10)
+Db.Print()
 '''
 
-
+'''
 class HashTable:
     def __init__(self, size):
         self.data = [None for i in range(size)]
@@ -127,3 +214,4 @@ linklist =HashTable.ShowLinkedList(0).Print()
 
 print(Hash(523,10))
 
+'''
