@@ -33,27 +33,6 @@ class DoublyLinkedList:
             self.Head.Previous_Node = new_node
             self.Head = new_node
 
-    def InsertatEnd(self, value):
-        head = self.Head
-        new_node = Node(value)
-
-        # if empty Linkedlist
-        if head is None:
-            self.Head = new_node
-            self.Tail = new_node
-            new_node.Previous_Node = None
-
-        # if non-empty Linkedlist
-        else:
-            # Transverse till head.next exists.
-            while head.Next_Node is not None:
-                head = head.Next_Node
-                # end while
-
-            new_node.Previous_Node = head
-            head.Next_Node = new_node
-            self.Tail = new_node
-
     def Get_Head(self):
 
         return self.Head
@@ -61,28 +40,6 @@ class DoublyLinkedList:
     def Get_Tail(self):
 
         return self.Tail
-
-    def Insert_After(self, existing_val, new_val):
-
-        if self.Tail.value == existing_val:
-            self.InsertatEnd(new_val)
-
-        else:
-
-            pointer = self.Head
-            new_node = Node(new_val)
-
-            # Transverse till pointer is not not None
-            while pointer:
-
-                # if pointer node is of given
-                if pointer.value == existing_val:
-                    # Add new_node after it
-                    new_node.Next_Node = pointer.Next_Node
-                    pointer.Next_Node = new_node
-                    new_node.Previous_Node = pointer
-                    return
-                pointer = pointer.Next_Node
 
     def DeleteatFirst(self):
 
@@ -106,21 +63,6 @@ class DoublyLinkedList:
         self.Tail = pointer
         self.Tail.Next_Node = None
 
-    def Delete_By_Value(self, value):
-
-        if self.Tail.value == value:
-            self.DeleteatEnd()
-        elif self.Head.value == value:
-            self.DeleteatFirst()
-        else:
-            pointer = self.Head
-
-            # Transverse until pointer node value matches given value
-            while pointer.value != value:
-                pointer = pointer.Next_Node
-
-            pointer.Next_Node.Previous_Node = pointer.Previous_Node
-            pointer.Previous_Node.Next_Node = pointer.Next_Node
 
     def Print(self):
         x = self.Head
