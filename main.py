@@ -56,6 +56,10 @@ class DoublyLinkedList:
         if pointer is None:
             raise IndexError("List is empty.")
 
+        if pointer == self.Tail:
+            self.Head = None
+            self.Tail = None
+
         # loop till pointer's next node is not tail
         while pointer.Next_Node != self.Tail:
             pointer = pointer.Next_Node
@@ -63,6 +67,21 @@ class DoublyLinkedList:
         self.Tail = pointer
         self.Tail.Next_Node = None
 
+    def Delete_By_Value(self, value):
+
+        if self.Tail.value == value:
+            self.DeleteatEnd()
+        elif self.Head.value == value:
+            self.DeleteatFirst()
+        else:
+            pointer = self.Head
+
+            # Transverse until pointer node value matches given value
+            while pointer.value != value:
+                pointer = pointer.Next_Node
+
+            pointer.Next_Node.Previous_Node = pointer.Previous_Node
+            pointer.Previous_Node.Next_Node = pointer.Next_Node
 
     def Print(self):
         x = self.Head
@@ -117,18 +136,33 @@ class HashTable:
             # print("No Linked list")
             # Create a linked list at this place
             self.data[index] = DoublyLinkedList()
-            # initialize node with value = "element"
-            tempvar = Node(element)
-            # Insert node into Linked list
-            self.data[index].InsertatFirst(tempvar)
+            # Insert into Linked list
+            self.data[index].InsertatFirst(element)
 
         # If there is linked list present at index
         else:
             # print("Linked List exists")
-            # initialize node with value = "element"
-            tempvar = Node(element)
-            # Insert node into Linked list
-            self.data[index].InsertatFirst(tempvar)
+            # Insert element into Linked list
+            self.data[index].InsertatFirst(element)
+
+    def Delete(self, element):
+        # Calculate Hash index
+        index = self.__Hash(element)
+
+        # Check Hash index
+        if index < 0 or index >= self.size:
+            raise IndexError("Out of Index")
+
+        # If there is no linked List already at index
+        if type(self.data[index]) is not DoublyLinkedList:
+            print("Element Not in Hashtable")
+            return
+        else:
+            self.data[index].Delete_By_Value(element)
+
+    def Print(self):
+        for loop in range(self.size):
+            self.ShowLinkedList(loop).Print()
 
     def ShowLinkedList(self, index):
 
@@ -184,9 +218,10 @@ HashTable.Insert("lalalala")
 HashTable.Insert(777)
 
 HashTable.Insert(5)
-
-HashTable.ShowLinkedList(1).Print()
+HashTable.Delete(5)
 
 '''for loop in range(100):
 
     HashTable.ShowLinkedList(loop).Print()'''
+
+HashTable.Print()
